@@ -1,0 +1,14 @@
+/* 
+    Document   : default
+    Created on : May 29, 2011, 11:09:55 PM
+    Author     : triho
+    Description:
+        Purpose of the stylesheet follows.
+*/
+#logout{
+    float: right;
+}
+
+#panel{
+    text-align: center;
+}
