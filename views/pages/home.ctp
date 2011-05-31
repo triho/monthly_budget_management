@@ -28,13 +28,15 @@
                     <tr>
                         <td>
                             <? $unixTimeStamp = strtotime($expense["Expense"]["expense_date"]);?>
-                            <?=date("l, F j, Y", $unixTimeStamp)?> at 
-                            <b><?=date("H:i", $unixTimeStamp)?></b>
+                            <?=date("l, F j, Y", $unixTimeStamp)?>
                         </td>
                         <td><?=$expense["Expense"]["name"]?></td>
                         <td><?=$this->Number->currency($expense["Expense"]["amount"])?></td>
                         <td><?=$expense["User"]["first_name"]." ".$expense["User"]["last_name"]?></td>
-                        <td><?=$this->Html->link("Edit", "/expenses/edit/{$expense["Expense"]["id"]}");?></td>
+                        <td>
+                            <?= $this->Html->link("Edit", "/expenses/edit/{$expense["Expense"]["id"]}"); ?>
+                            <?= $this->Html->link("Delete", "/expenses/delete/{$expense["Expense"]["id"]}")?>
+                        </td>
                     </tr>
                     <? endforeach ?>
                 </tbody>

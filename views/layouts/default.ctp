@@ -39,7 +39,7 @@
                     <?= $this->Html->link("Log out", "/users/logout", array("id" => "logout")); ?>
                     <?=$this->Html->link("Home", "/", array("id"=>"home"))?>
                     <?=$this->Html->link("Add new expense", "/expenses/add", array("id"=>"new-expense"));?>
-                    <?=$this->Html->link("View all expenses", "/expenses/view_all", array("id"=>"view-expenses"))?>
+                    <?=$this->Html->link("View all expenses", "/expenses/", array("id"=>"view-expenses"))?>
                     <?=$this->Html->link("View all budgets", "/budgets/view_all", array("id"=>"view-budgets"));?>
                     <?=$this->Html->link("Manage my profile", "/users/view/{$this->Session->read("Auth.User.id")}", array("id"=>"profile"));?>
                 </div>
