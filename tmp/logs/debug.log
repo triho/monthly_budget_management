@@ -43,3 +43,6 @@
 2011-06-03 02:58:47 Notice: Notice (8): Undefined index: confirm_password in [/Users/triho/WebSites/app/monthly_budget_management/models/user.php, line 63]
 2011-06-03 02:59:21 Notice: Notice (8): Undefined index: confirm_password in [/Users/triho/WebSites/app/monthly_budget_management/models/user.php, line 63]
 2011-06-03 02:59:45 Notice: Notice (8): Undefined index: confirm_password in [/Users/triho/WebSites/app/monthly_budget_management/models/user.php, line 63]
+2011-06-04 03:55:31 Notice: Notice (8): Undefined index: is_group in [/Users/triho/WebSites/app/monthly_budget_management/controllers/expenses_controller.php, line 72]
+2011-06-04 04:22:54 Notice: Notice (8): Undefined index: Group in [/Users/triho/WebSites/app/monthly_budget_management/controllers/expenses_controller.php, line 109]
+2011-06-04 04:23:16 Notice: Notice (8): Undefined index: Group in [/Users/triho/WebSites/app/monthly_budget_management/controllers/expenses_controller.php, line 110]

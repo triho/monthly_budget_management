@@ -9,6 +9,24 @@ class User extends AppModel {
 
     var $name = "User";
     var $hasMany = array("Expense", "Budget");
+    var $hasAndBelongsToMany = array(
+        'Group' => array(
+            'className' => 'Group',
+            'joinTable' => 'users_groups',
+            'foreignKey' => 'user_id',
+            'associationForeignKey' => 'group_id',
+            'unique' => true,
+            'conditions' => '',
+            'fields' => '',
+            'order' => '',
+            'limit' => '',
+            'offset' => '',
+            'finderQuery' => '',
+            'deleteQuery' => '',
+            'insertQuery' => ''
+        )
+    );
+    
     var $validate = array(
         "username" => array(
             "rule_1" => array(

@@ -23,59 +23,95 @@ class ExpensesController extends AppController {
         $expenses = $this->paginate("Expense", array("Expense.expense_date <" => date("Y-m-d", time() + 365 * 24 * 60 * 60)));
         $this->set("expenses", $expenses);
     }
-    
+
     /**
      * Add new expenses
      */
-    public function add(){
-        if (!empty($this->data)){            
+    public function add() {
+        if (!empty($this->data)) {
             $expenseDate = date("Y-m-d", strtotime($this->data["Expense"]["expense_date"]));
             $this->data["Expense"]["expense_date"] = $expenseDate;
+
+            if ($this->data["Expense"]["is_group"] != 1) {
+                $this->data["Expense"]["group_id"] = -1;
+            }
             $this->data["Expense"]["user_id"] = $this->Session->read("Auth.User.id");
-            if ($this->Expense->save($this->data)){
+            unset($this->data["Expense"]["is_group"]);
+
+            if ($this->Expense->save($this->data)) {
                 $this->Session->setFlash("New expense has been added");
                 $this->go_back("index");
             }
+        } else {
+            $groupNames = $this->get_group_names();
+            $this->set("groups", $groupNames);
         }
     }
-    
+
     /**
      * Edit expense
      * @param type $id 
      */
-    public function edit($id = null){
+    public function edit($id = null) {
         $this->Expense->id = $id;
-        if (empty($this->data)){
+        if (empty($this->data)) {
             $this->data = $this->Expense->read();
             $this->data["Expense"]["expense_date"] = date("m/d/Y", strtotime($this->data["Expense"]["expense_date"]));
-        }
-        else{
+            // Get all groups
+            $groupNames = $this->get_group_names();
+            $this->set("groups", $groupNames);
+
+            if ($this->data["Expense"]["group_id"] != -1) {
+                $this->data["Expense"]["is_group"] = 1;
+            }
+        } else {
             $expenseDate = date("Y-m-d", strtotime($this->data["Expense"]["expense_date"]));
             $this->data["Expense"]["expense_date"] = $expenseDate;
             $this->data["Expense"]["user_id"] = $this->Session->read("Auth.User.id");
-            if ($this->Expense->save($this->data)){
+            if ($this->Expense->save($this->data)) {
                 $this->Session->setFlash("Successfully updating expense");
                 $this->go_back("index");
             }
         }
     }
-    
+
     /**
      * Delete expenses
      * @param type $id
      * @return type true|false
      */
-    public function delete($id){
-        if ($id!=null){
-            if ($this->Expense->delete($id, false)){
+    public function delete($id) {
+        if ($id != null) {
+            if ($this->Expense->delete($id, false)) {
                 $this->Session->setFlash("Delete successfully");
-                $this->redirect(array("action"=>"index"));
-            }
-            else{
+                $this->redirect(array("action" => "index"));
+            } else {
                 $this->Session->setFlash("Could not delete");
                 $this->go_back();
             }
         }
+    }
+
+    /**
+     * Get all group names from the group list that belongs to the user
+     * @return array
+     */
+    private function get_group_names() {
+        $this->loadModel("User");
+        $records = $this->User->find("all", array(
+                    "conditions" => array(
+                        "User.id" => $this->Session->read("Auth.User.id")
+                    )
+                ));
+        if (!empty($records)){
+            $groups = $records[0]["Group"];
+            if (empty($groups)) return array();
+            foreach($groups as $group){
+                $list[$group["id"]] = $group["name"];
+            }
+            return $list;
+        }
+        else return array();
     }
 
 }
