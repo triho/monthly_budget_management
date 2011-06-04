@@ -28,18 +28,13 @@ class ExpensesController extends AppController {
      * Add new expenses
      */
     public function add(){
-        if (!empty($this->data)){
-            $this->loadModel("Budget");
-            $currentBudgetId = $this->Budget->get_current_budget_id();
-            
-            if ($currentBudgetId!=null) $this->data["Expense"]["budget_id"] = $currentBudgetId;
-            
+        if (!empty($this->data)){            
             $expenseDate = date("Y-m-d", strtotime($this->data["Expense"]["expense_date"]));
             $this->data["Expense"]["expense_date"] = $expenseDate;
             $this->data["Expense"]["user_id"] = $this->Session->read("Auth.User.id");
             if ($this->Expense->save($this->data)){
                 $this->Session->setFlash("New expense has been added");
-                $this->redirect(array("action"=>"index"));
+                $this->go_back("index");
             }
         }
     }
@@ -60,7 +55,7 @@ class ExpensesController extends AppController {
             $this->data["Expense"]["user_id"] = $this->Session->read("Auth.User.id");
             if ($this->Expense->save($this->data)){
                 $this->Session->setFlash("Successfully updating expense");
-                $this->redirect(array("action"=>"index"));
+                $this->go_back("index");
             }
         }
     }
@@ -78,7 +73,7 @@ class ExpensesController extends AppController {
             }
             else{
                 $this->Session->setFlash("Could not delete");
-                $this->redirect(array("action"=>"index"));
+                $this->go_back();
             }
         }
     }

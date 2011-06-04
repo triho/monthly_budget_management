@@ -11,11 +11,11 @@ class Expense extends AppModel {
         "User" => array(
             "className" => "User",
             "foreignKey" => "user_id"
-        ),
-        "Budget" => array(
-            "className" => "Budget",
-            "foreignKey" => "budget_id"
         )
+//        "Budget" => array(
+//            "className" => "Budget",
+//            "foreignKey" => "budget_id"
+//        )
     );
 }
 ?>

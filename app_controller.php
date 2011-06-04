@@ -42,4 +42,15 @@ class AppController extends Controller {
     function beforeFilter(){
         $this->Auth->authenticate = ClassRegistry::init("User");
     }
+    
+    /**
+     * Go back to the referer page
+     */
+    protected function go_back($action = null){
+        if ($this->referer() != '/' && $action==null){
+            $this->redirect($this->referer());
+        }else{
+            $this->redirect(array("action"=>($action==null)?"index":$action));
+        }
+    }
 }

@@ -9,3 +9,5 @@
 2011-05-31 02:38:54 Warning: Warning (2): array_merge() [<a href='http://php.net/function.array-merge'>function.array-merge</a>]: Argument #1 is not an array in [/Users/triho/WebSites/cake/libs/view/helpers/paginator.php, line 378]
 2011-05-31 03:43:22 Warning: Warning (2): date() expects parameter 2 to be long, string given in [/Users/triho/WebSites/app/monthly_budget_management/views/expenses/edit.ctp, line 8]
 2011-05-31 03:44:10 Warning: Warning (2): Missing argument 1 for ExpensesController::edit() in [/Users/triho/WebSites/app/monthly_budget_management/controllers/expenses_controller.php, line 51]
+2011-06-02 03:19:46 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/triho/WebSites/cake/libs/debugger.php:673) in [/Users/triho/WebSites/cake/libs/controller/controller.php, line 742]
+2011-06-03 02:54:58 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/triho/WebSites/cake/libs/debugger.php:673) in [/Users/triho/WebSites/cake/libs/controller/controller.php, line 742]

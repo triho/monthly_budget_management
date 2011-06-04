@@ -13,7 +13,7 @@ class Budget extends AppModel {
         )
     );
     
-    var $hasMany = array("Expense");
+//    var $hasMany = array("Expense");
     
     /**
      * Get the current budget of this month

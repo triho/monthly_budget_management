@@ -78,34 +78,48 @@ class PagesController extends AppController {
             $title_for_layout = Inflector::humanize($path[$count - 1]);
         }
 
-        $budget = $this->Budget->find("first", array(
-                    "conditions" => array(
-                        "MONTH(Budget.period_date)" => date("n"),
-                        "YEAR(Budget.period_date)" => date("Y")
-                    )
-                ));
+//        $budget = $this->Budget->find("first", array(
+//                    "conditions" => array(
+//                        "MONTH(Budget.period_date)" => date("n"),
+//                        "YEAR(Budget.period_date)" => date("Y")
+//                    )
+//                ));
+//
+//        if (isset($budget) && !empty($budget)) {
+//            $expenses = $this->Expense->find("all", array(
+////                        "conditions" => array("MONTH(Expense.expense_date)" => date("n")),
+//                        "conditions" => array("Expense.budget_id" => $budget["Budget"]["id"]),
+//                        "recursive" => 1,
+//                        "order" => array("Expense.expense_date DESC")
+//                    ));
+//            // Calculate expenses
+//            $sum = 0;
+//            if (!empty($expenses)) {
+//                foreach ($expenses as $expense) {
+//                    $sum += $expense["Expense"]["amount"];
+//                }
+//            }
+//            $this->set("totalSpendingOfThisMonth", $sum);
+//        } else {
+//            $expenses = array();
+//            $budget = array();
+//        }
 
-        if (isset($budget) && !empty($budget)) {
-            $expenses = $this->Expense->find("all", array(
-//                        "conditions" => array("MONTH(Expense.expense_date)" => date("n")),
-                        "conditions" => array("Expense.budget_id" => $budget["Budget"]["id"]),
+//        $this->set("budget", $budget);
+        
+        $expenses = $this->Expense->find("all", array(
+                        "conditions" => array("MONTH(Expense.expense_date)" => date("n"), "YEAR(Expense.expense_date)" => date("Y")),
                         "recursive" => 1,
                         "order" => array("Expense.expense_date DESC")
                     ));
             // Calculate expenses
-            $sum = 0;
-            if (!empty($expenses)) {
-                foreach ($expenses as $expense) {
-                    $sum += $expense["Expense"]["amount"];
-                }
+        $sum = 0;
+        if (!empty($expenses)) {
+            foreach ($expenses as $expense) {
+                $sum += $expense["Expense"]["amount"];
             }
-            $this->set("totalSpendingOfThisMonth", $sum);
-        } else {
-            $expenses = array();
-            $budget = array();
         }
-
-        $this->set("budget", $budget);
+        $this->set("totalSpendingOfThisMonth", $sum);
         $this->set("expenses", $expenses);
         $this->set(compact('page', 'subpage', 'title_for_layout'));
         $this->render(implode('/', $path));
