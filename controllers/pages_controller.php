@@ -77,42 +77,41 @@ class PagesController extends AppController {
         if (!empty($path[$count - 1])) {
             $title_for_layout = Inflector::humanize($path[$count - 1]);
         }
+        // Find the groups that this user belongs to
+        $this->loadModel("Group");
+        $groups = $this->Group->find("list", array(
+                    "fields" => array("Group.id"),
+                    "joins" => array(
+                        array(
+                            "table" => "users_groups",
+                            "alias" => "UsersGroup",
+                            "type" => "INNER",
+                            "conditions" => array(
+                                "UsersGroup.group_id = Group.id"
+                            )
+                        )
+                    ),
+                    "conditions" => array(
+                        "UsersGroup.user_id" => $this->Session->read("Auth.User.id")
+                    )
+                ));
 
-//        $budget = $this->Budget->find("first", array(
-//                    "conditions" => array(
-//                        "MONTH(Budget.period_date)" => date("n"),
-//                        "YEAR(Budget.period_date)" => date("Y")
-//                    )
-//                ));
-//
-//        if (isset($budget) && !empty($budget)) {
-//            $expenses = $this->Expense->find("all", array(
-////                        "conditions" => array("MONTH(Expense.expense_date)" => date("n")),
-//                        "conditions" => array("Expense.budget_id" => $budget["Budget"]["id"]),
-//                        "recursive" => 1,
-//                        "order" => array("Expense.expense_date DESC")
-//                    ));
-//            // Calculate expenses
-//            $sum = 0;
-//            if (!empty($expenses)) {
-//                foreach ($expenses as $expense) {
-//                    $sum += $expense["Expense"]["amount"];
-//                }
-//            }
-//            $this->set("totalSpendingOfThisMonth", $sum);
-//        } else {
-//            $expenses = array();
-//            $budget = array();
-//        }
-
-//        $this->set("budget", $budget);
-        
         $expenses = $this->Expense->find("all", array(
-                        "conditions" => array("MONTH(Expense.expense_date)" => date("n"), "YEAR(Expense.expense_date)" => date("Y")),
-                        "recursive" => 1,
-                        "order" => array("Expense.expense_date DESC")
-                    ));
-            // Calculate expenses
+                    "conditions" => array(
+                        "MONTH(Expense.expense_date)" => date("n"),
+                        "YEAR(Expense.expense_date)" => date("Y"),
+                        "OR" => array(
+                            array(
+                                "Expense.group_id" => $groups,
+                                "Expense.user_id <>" => $this->Session->read("Auth.User.id")
+                            ),
+                            "Expense.user_id" => $this->Session->read("Auth.User.id")
+                        ),
+                    ),
+                    "recursive" => 1,
+                    "order" => array("Expense.expense_date DESC")
+                ));
+        // Calculate expenses
         $sum = 0;
         if (!empty($expenses)) {
             foreach ($expenses as $expense) {

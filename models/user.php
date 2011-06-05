@@ -28,6 +28,26 @@ class User extends AppModel {
     );
     
     var $validate = array(
+        "first_name" => array(
+            "rule_1" => array(
+                "rule" => "alphaNumeric",
+                "message" => "First name must be alpha numeric"
+            ),
+            "rule_2" => array(
+                "rule" => "notEmpty",
+                "message" => "First name must not be empty"
+            )
+        ),
+        "last_name" => array(
+            "rule_1" => array(
+                "rule" => "notEmpty",
+                "message" => "Last name must not be empty"
+            ),
+            "rule_2" => array(
+                "rule" => "alphaNumeric",
+                "message" => "Last name must contain only letter or digits"
+            )
+        ),
         "username" => array(
             "rule_1" => array(
                 "rule" => "alphaNumeric",

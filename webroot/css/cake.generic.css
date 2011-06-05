@@ -42,27 +42,19 @@ a img {
 	border:none;
 }
 h1, h2, h3, h4 {
-	font-weight: normal;
+	font-weight: bold;
 	margin-bottom:0.5em;
 }
 h1 {
-	background:#fff;
-	color: #003d4c;
-	font-size: 100%;
-}
-h2 {
-	background:#fff;
-	color: #e32;
-	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
 	font-size: 190%;
 }
+h2 {
+	font-size: 140%;
+}
 h3 {
-	color: #993;
-	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
-	font-size: 165%;
+	font-size: 110%;
 }
 h4 {
-	color: #993;
 	font-weight: normal;
 }
 ul, li {
@@ -148,10 +140,10 @@ th a {
 	text-decoration: none;
 }
 th a.asc:after {
-	content: ' ⇣';
+	content: ' asc';
 }
 th a.desc:after {
-	content: ' ⇡';
+	content: ' desc';
 }
 table tr td {
 	background: #fff;

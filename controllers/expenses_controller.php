@@ -19,8 +19,80 @@ class ExpensesController extends AppController {
     /**
      * View all expenses
      */
-    public function index() {
-        $expenses = $this->paginate("Expense", array("Expense.expense_date <" => date("Y-m-d", time() + 365 * 24 * 60 * 60)));
+    public function index() {        
+        $this->loadModel("Group");
+        $groups = $this->Group->find("list", array(
+                    "fields" => array("Group.id", "Group.name"),
+                    "joins" => array(
+                        array(
+                            "table" => "users_groups",
+                            "alias" => "UsersGroup",
+                            "type" => "INNER",
+                            "conditions" => array(
+                                "UsersGroup.group_id = Group.id"
+                            )
+                        )
+                    ),
+                    "conditions" => array(
+                        "UsersGroup.user_id" => $this->Session->read("Auth.User.id")
+                    )
+                ));
+        $groupSet = array_keys($groups);
+        $this->set("groups", $groups);
+
+        $months = array(1 => "January", 2 => "February", 3 => "March", 4 => "April", 5 => "May", 6 => "June", 7 => "July", 8 => "August", 9 => "September", 10 => "October", 11 => "November", 12 => "December");
+        $this->set("months", $months);
+        
+        for ($i = 2010; $i < 2020; $i++) {
+            $years[$i] = $i;
+        }
+        $this->set("years", $years);
+
+        $isFilterByDate = false;
+
+        if (!empty($this->data)) {
+            if ($this->data["Filter"]["name"] != "") {
+                $conditions["Expense.group_id"] = $this->data["Filter"]["name"];
+            }
+
+            if ($this->data["Filter"]["month"] != "") {
+                $conditions["MONTH(Expense.expense_date)"] = $this->data["Filter"]["month"];
+                $isFilterByDate = true;
+            }
+
+            if ($this->data["Filter"]["year"] != "") {
+                $conditions["YEAR(Expense.expense_date)"] = $this->data["Filter"]["year"];
+                $isFilterByDate = true;
+            }
+        }
+
+
+        if (!$isFilterByDate) {
+            $conditions["MONTH(Expense.expense_date)"] = date("m");
+            $conditions["YEAR(Expense.expense_date)"] = date("Y");
+            $this->data["Filter"]["month"] = date("n");
+            $this->data["Filter"]["year"] = date("Y");
+        }
+        
+        if (!empty($groups)){
+            $conditions["OR"] = array(
+                array(
+                    "Expense.group_id" => $groupSet,
+                    "Expense.user_id <>" => $this->Session->read("Auth.User.id")
+                ),
+                "Expense.user_id" => $this->Session->read("Auth.User.id")
+            );
+        }
+
+        $expenses = $this->paginate("Expense", $conditions);
+        // Calculate expenses
+        $sum = 0;
+        if (!empty($expenses)) {
+            foreach ($expenses as $expense) {
+                $sum += $expense["Expense"]["amount"];
+            }
+        }
+        $this->set("totalSpendingOfThisMonth", $sum);
         $this->set("expenses", $expenses);
     }
 
@@ -40,7 +112,7 @@ class ExpensesController extends AppController {
 
             if ($this->Expense->save($this->data)) {
                 $this->Session->setFlash("New expense has been added");
-                $this->go_back("index");
+                $this->go_back();
             }
         } else {
             $groupNames = $this->get_group_names();
@@ -53,8 +125,8 @@ class ExpensesController extends AppController {
      * @param type $id 
      */
     public function edit($id = null) {
-        $this->Expense->id = $id;
         if (empty($this->data)) {
+            $this->Expense->id = $id;
             $this->data = $this->Expense->read();
             $this->data["Expense"]["expense_date"] = date("m/d/Y", strtotime($this->data["Expense"]["expense_date"]));
             // Get all groups
@@ -70,7 +142,7 @@ class ExpensesController extends AppController {
             $this->data["Expense"]["user_id"] = $this->Session->read("Auth.User.id");
             if ($this->Expense->save($this->data)) {
                 $this->Session->setFlash("Successfully updating expense");
-                $this->go_back("index");
+                $this->go_back();
             }
         }
     }
@@ -84,11 +156,10 @@ class ExpensesController extends AppController {
         if ($id != null) {
             if ($this->Expense->delete($id, false)) {
                 $this->Session->setFlash("Delete successfully");
-                $this->redirect(array("action" => "index"));
             } else {
                 $this->Session->setFlash("Could not delete");
-                $this->go_back();
             }
+            $this->go_back();
         }
     }
 
@@ -103,15 +174,17 @@ class ExpensesController extends AppController {
                         "User.id" => $this->Session->read("Auth.User.id")
                     )
                 ));
-        if (!empty($records)){
+        if (!empty($records)) {
             $groups = $records[0]["Group"];
-            if (empty($groups)) return array();
-            foreach($groups as $group){
+            if (empty($groups))
+                return array();
+            foreach ($groups as $group) {
                 $list[$group["id"]] = $group["name"];
             }
             return $list;
         }
-        else return array();
+        else
+            return array();
     }
 
 }

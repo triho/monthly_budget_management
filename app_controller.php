@@ -47,10 +47,10 @@ class AppController extends Controller {
      * Go back to the referer page
      */
     protected function go_back($action = null){
-        if ($this->referer() != '/' && $action==null){
+        if ($action==null){
             $this->redirect($this->referer());
         }else{
-            $this->redirect(array("action"=>($action==null)?"index":$action));
+            $this->redirect(array("action"=>$action));
         }
     }
 }
