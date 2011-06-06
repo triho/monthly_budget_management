@@ -82,6 +82,8 @@ class ExpensesController extends AppController {
                 ),
                 "Expense.user_id" => $this->Session->read("Auth.User.id")
             );
+        }else{
+            $conditions["Expense.user_id"] = $this->Session->read("Auth.User.id");
         }
 
         $expenses = $this->paginate("Expense", $conditions);
@@ -94,6 +96,7 @@ class ExpensesController extends AppController {
         }
         $this->set("totalSpendingOfThisMonth", $sum);
         $this->set("expenses", $expenses);
+        $this->set("title_for_layout", "View all expenses");
     }
 
     /**
@@ -104,9 +107,13 @@ class ExpensesController extends AppController {
             $expenseDate = date("Y-m-d", strtotime($this->data["Expense"]["expense_date"]));
             $this->data["Expense"]["expense_date"] = $expenseDate;
 
-            if ($this->data["Expense"]["is_group"] != 1) {
+//            if ($this->data["Expense"]["is_group"] != 1 || ($this->data["Expense"]["is_group"]== 1 && $this->data["Expense"]["group_id"]== "")) {
+//                $this->data["Expense"]["group_id"] = -1;
+//            }
+            if ($this->data["Expense"]["group_id"] == ""){
                 $this->data["Expense"]["group_id"] = -1;
             }
+            
             $this->data["Expense"]["user_id"] = $this->Session->read("Auth.User.id");
             unset($this->data["Expense"]["is_group"]);
 
@@ -132,14 +139,15 @@ class ExpensesController extends AppController {
             // Get all groups
             $groupNames = $this->get_group_names();
             $this->set("groups", $groupNames);
-
-            if ($this->data["Expense"]["group_id"] != -1) {
-                $this->data["Expense"]["is_group"] = 1;
-            }
         } else {
             $expenseDate = date("Y-m-d", strtotime($this->data["Expense"]["expense_date"]));
             $this->data["Expense"]["expense_date"] = $expenseDate;
             $this->data["Expense"]["user_id"] = $this->Session->read("Auth.User.id");
+            
+            if ($this->data["Expense"]["group_id"]==""){
+                $this->data["Expense"]["group_id"] = -1;
+            }
+            
             if ($this->Expense->save($this->data)) {
                 $this->Session->setFlash("Successfully updating expense");
                 $this->go_back();

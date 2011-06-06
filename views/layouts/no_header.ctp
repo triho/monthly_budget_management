@@ -26,28 +26,15 @@
         </title>
         <?php
         echo $this->Html->css(array('cake.generic', "grid", "smoothness/jquery-ui-1.8.13.custom", "default"));
-        echo $javascript->link(array("jquery-1.5.1.min", "jquery-ui-1.8.13.custom.min", "default"));
         echo $scripts_for_layout;
         ?>
     </head>
     <body>
         <div id="container">
-            <div id="header">
-                <div id="panel">
-                    <?= $this->Html->link("Log out", "/users/logout", array("id" => "logout")); ?>
-                    <?=$this->Html->link("Home", "/", array("id"=>"home"))?>
-                    <?=$this->Html->link("Add new expense", "/expenses/add", array("id"=>"new-expense"));?>
-                    <?=$this->Html->link("View all expenses", "/expenses/", array("id"=>"view-expenses"))?>
-                    <?=$this->Html->link("Manage my groups", "/groups/", array("id"=>"manage-groups"));?>
-                    <?=$this->Html->link("Edit profile", "/users/edit", array("id"=>"profile"));?>
-                </div>
-            </div>
+            <div id="header"></div>
             <div id="content">
-
                 <?php echo $this->Session->flash(); ?>
-
                 <?php echo $content_for_layout; ?>
-
             </div>
             <div id="footer">
             </div>

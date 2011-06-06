@@ -6,7 +6,10 @@
     <?php
         echo $this->Form->create('User', array('action' => 'login', "class"=>"grid_6 push_3"));
         echo $this->Form->input('username');
-        echo $this->Form->input('password');
-        echo $this->Form->end('Login', array("id"=>"login"));
-    ?>
+        echo $this->Form->input('password');?>
+    <div class="submit">
+        <?= $this->Form->end(array("id"=>"login", "div"=>false, "label"=>"Login"));?>
+        <?//= $this->Html->link("Forgot password", "/users/forgot_password"); ?>
+        <?= $this->Html->link("Create a new account", "/users/add"); ?>
+    </div>
 </div>

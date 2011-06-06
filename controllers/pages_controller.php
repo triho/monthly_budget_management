@@ -121,6 +121,7 @@ class PagesController extends AppController {
         $this->set("totalSpendingOfThisMonth", $sum);
         $this->set("expenses", $expenses);
         $this->set(compact('page', 'subpage', 'title_for_layout'));
+        $this->set("title_for_layout", "Monthly Expense Management");
         $this->render(implode('/', $path));
     }
 

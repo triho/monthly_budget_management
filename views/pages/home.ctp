@@ -15,7 +15,7 @@
             <thead>
                 <tr>
                     <th width="25%">Date</th>
-                    <th width="25%">Location</th>
+                    <th width="25%">Name</th>
                     <th width="10%">Amount</th>
                     <th width="10%">By</th>
                     <th width="10%">Group</th>
@@ -33,10 +33,10 @@
                             <td><?= $expense["Expense"]["name"] ?></td>
                             <td class="money"><?= $this->Number->currency($expense["Expense"]["amount"]) ?></td>
                             <td><?= $expense["User"]["first_name"] . " " . $expense["User"]["last_name"] ?></td>
-                            <td><?= $expense["Group"]["name"]?$expense["Group"]["name"]:"Individual" ?></td>
+                            <td><?= $expense["Group"]["name"]?$expense["Group"]["name"]:"Personal" ?></td>
                             <td>
                                 <?= $this->Html->link("Edit", "/expenses/edit/{$expense["Expense"]["id"]}"); ?>
-                                <?= $this->Html->link("Delete", "/expenses/delete/{$expense["Expense"]["id"]}") ?>
+                                <?= $this->Html->link("Delete", "/expenses/delete/{$expense["Expense"]["id"]}", null, "Are you sure you want to delete?") ?>
                             </td>
                         </tr>
                     <? endforeach ?>

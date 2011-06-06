@@ -12,19 +12,12 @@
  * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
- * @subpackage    cake.cake.libs.view.templates.layouts.email.html
+ * @subpackage    cake.cake.libs.view.templates.elements.email.text
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-
-<html>
-<head>
-	<title><?php echo $title_for_layout;?></title>
-</head>
-
-<body>
-	<?php echo $content_for_layout;?>
-</body>
-</html>
+Dear <?=$user["first_name"]." ".$user["last_name"];?>\n
+This is your new password <b><?=$user["password"];?>\n
+Please login <?=$this->Html->link($this->Html->url("/users/login"), "/users/login");?>\n
+If you have any questions, please don't hesitate to contact us at budgetcustomercare@trihoprojects.com\n

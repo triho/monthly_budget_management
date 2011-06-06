@@ -23,7 +23,7 @@
             <thead>
                 <tr>
                     <th width="25%"><?= $this->Paginator->sort("Date", "expense_date") ?></th>
-                    <th width="25%"><?= $this->Paginator->sort("Location", "name") ?></th>
+                    <th width="25%"><?= $this->Paginator->sort("Name", "name") ?></th>
                     <th width="10%"><?= $this->Paginator->sort("Amount", "amount") ?></th>
                     <th width="10%"><?= $this->Paginator->sort("By", "User.first_name") ?></th>
                     <th width="15%"><?= $this->Paginator->sort("Group", "Group.name") ?></th>
@@ -41,7 +41,7 @@
                             <td><?= $expense["Expense"]["name"] ?></td>
                             <td class="money"><?= $this->Number->currency($expense["Expense"]["amount"]) ?></td>
                             <td><?= $expense["User"]["first_name"] . " " . $expense["User"]["last_name"] ?></td>
-                            <td><?= $expense["Group"]["name"] ? $expense["Group"]["name"] : "Individual"; ?></td>
+                            <td><?= $expense["Group"]["name"] ? $expense["Group"]["name"] : "Personal"; ?></td>
                             <td>
                                 <?= $this->Html->link("Edit", "/expenses/edit/{$expense["Expense"]["id"]}"); ?>
                                 <?= $this->Html->link("Delete", "/expenses/delete/{$expense["Expense"]["id"]}", null, "Are you sure you want to delete?") ?>
